@@ -1,5 +1,6 @@
 (() => {
 	let contentLoaded = false;
+
 	const btnOnClick = (e) => {
 		e.preventDefault();
 		e.target.classList.add("animate");
@@ -16,20 +17,20 @@
 
 				return new ReadableStream({
 					start(controller) {
-						// The following function handles each data chunk
+						// Handles each data chunk
 						function push() {
-							// "done" is a Boolean and value a "Uint8Array"
+							// Read chunks sequentially.
+							// When there are no more chunks left done becomes false
 							reader.read().then(({ done, value }) => {
-								// If there is no more data to read
+								// Close controller stream if done.
 								if (done) {
-									// console.log("done", done);
 									controller.close();
 									return;
 								}
-								// Get the data and send it to the browser via the controller
+								// Add chunk to stream
 								controller.enqueue(value);
-								// Check chunks by logging to the console
-								// console.log(done, value);
+
+								// Recursion
 								push();
 							});
 						}
@@ -46,9 +47,13 @@
 				}).text();
 			})
 			.then((result) => {
-				// Do things with result
+				// Update article element content with result
 				document.querySelector(".container article").textContent = result;
-				// console.log(result);
+			})
+			.catch((error) => {
+				contentLoaded = false;
+				alert("An error occured. Please try again later.");
+				console.error("Error", error);
 			});
 	};
 
