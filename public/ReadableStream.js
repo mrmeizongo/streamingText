@@ -17,24 +17,29 @@
 
 				return new ReadableStream({
 					start(controller) {
-						// Handles each data chunk
+						// Handles each data chunk recursively
 						function push() {
 							// Read chunks sequentially.
 							// When there are no more chunks left done becomes false
 							reader.read().then(({ done, value }) => {
+								console.log("Streaming data");
 								// Close controller stream if done.
 								if (done) {
+									console.log("All data read:", done, "\nData value:", value);
 									controller.close();
 									return;
 								}
 								// Add chunk to stream
 								controller.enqueue(value);
+								// Display chunks as they are being read
+								console.log("All data read:", done, "\nData value:", value);
 
 								// Recursion
 								push();
 							});
 						}
 
+						// Execute recursive function
 						push();
 					},
 				});
