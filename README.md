@@ -1,2 +1,3 @@
-# streamingText
-Streaming text file to client using ReadableStream.
+# StreamingText
+
+Streaming a text file to client using the ReadableStream() and fs.createReadStream interfaces.
