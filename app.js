@@ -18,7 +18,7 @@ app.get("/", (_, res) => {
 	res.status(200).sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/text", async (req, res) => {
+app.get("/text", (req, res) => {
 	const readable = fs.createReadStream("./text.txt");
 
 	res.status(200);
